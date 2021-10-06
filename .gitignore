@@ -1,0 +1,13 @@
+/*
+!/build
+!/apps
+!/cmake
+!/docs
+!/extern
+!/include
+!/scripts
+!/src
+!/tests
+!.gitignore
+!CMakeLists.txt
+!README.md
