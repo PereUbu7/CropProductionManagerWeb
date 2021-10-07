@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CropProductionManager/InternalModel/Infrastructure/crop.h"
+#include "CropProductionManager/InternalModel/Api/crop.h"
 
 #include <string>
 
@@ -23,7 +24,15 @@ namespace CropProductionManager::InternalModel::Core
             variety{variety},
             batch{batch} {}
 
-        Crop(Infrastructure::Crop& infra) :
+        Crop(const Infrastructure::Crop& infra) :
+            id{infra.id},
+            name{infra.name},
+            variety{infra.variety},
+            batch{infra.batch}
+        { 
+        }
+
+        Crop(const Api::Crop& infra) :
             id{infra.id},
             name{infra.name},
             variety{infra.variety},
@@ -33,6 +42,8 @@ namespace CropProductionManager::InternalModel::Core
 
         void Update(Crop crop);
         Infrastructure::Crop ToInfrastructure();
+        Api::Crop ToApi();
         Crop static FromInfrastructure(Infrastructure::Crop crop);
+        Crop static FromApi(Api::Crop crop);
     };
 }

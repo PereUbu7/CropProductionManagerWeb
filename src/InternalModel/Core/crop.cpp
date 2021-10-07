@@ -5,7 +5,7 @@ namespace CropProductionManager::InternalModel::Core
 {
     namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;
 
-    void Crop::Update(Crop crop)
+    void Crop::Update(const Crop crop)
     {
         id = crop.id;
         name = crop.name;
@@ -18,7 +18,17 @@ namespace CropProductionManager::InternalModel::Core
         return Infrastructure::Crop{ id, name, variety, batch };
     }
 
-    Crop Crop::FromInfrastructure(Infrastructure::Crop crop)
+    Crop Crop::FromInfrastructure(const Infrastructure::Crop crop)
+    {
+        return Crop{ crop };
+    }
+
+    Api::Crop Crop::ToApi()
+    {
+        return Api::Crop{ id, name, variety, batch };
+    }
+
+    Crop Crop::FromApi(const Api::Crop crop)
     {
         return Crop{ crop };
     }

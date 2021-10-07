@@ -27,8 +27,7 @@ namespace CropProductionManager::Infrastructure
     {
         auto cropToModify
         {
-             
-                std::find_if(begin(crops), end(crops), [crop](Crop c){ return c.id == crop.id; })
+            std::find_if(begin(crops), end(crops), [crop](Crop c){ return c.id == crop.id; })
         };
 
         if(cropToModify != end(crops))

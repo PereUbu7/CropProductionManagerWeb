@@ -1,7 +1,6 @@
 #include "CropProductionManager/Infrastructure/cropRepository.h"
-#include "CropProductionManager/Core/iCore.h"
 #include "CropProductionManager/Core/cropCore.h"
-#include "CropProductionManager/InternalModel/Infrastructure/crop.h"
+#include "CropProductionManager/Api/cropApi.h"
 
 #include <iostream>
 #include <ranges>
@@ -13,32 +12,31 @@ namespace CropProductionManager
 {
     class Program
     {
-        using InfraCrop = CropProductionManager::InternalModel::Infrastructure::Crop;
-        using CoreCrop = CropProductionManager::InternalModel::Core::Crop;
+        using ApiCrop = CropProductionManager::InternalModel::Api::Crop;
     
     private:
-        CropProductionManager::Core::ICore<CoreCrop, InfraCrop>& _core;
+        CropProductionManager::Api::CropApi& _api;
 
     public:
-        Program(CropProductionManager::Core::ICore<CoreCrop, InfraCrop>& core) :
-            _core{core}
+        Program(CropProductionManager::Api::CropApi& api) :
+            _api{api}
         {}
 
         void Run()
         {
-            CoreCrop c1{0, "Broccoli", "Gnöuda", 1};
-            CoreCrop c2{0, "Broccoli", "Gnöuda", 2};
-            CoreCrop c3{0, "Vaxböna", "Groucha", 1};
-            _core.Post(c1);
-            _core.Post(c2);
-            _core.Post(c3);
+            ApiCrop c1{0, "Broccoli", "Gnöuda", 1};
+            ApiCrop c2{0, "Broccoli", "Gnöuda", 2};
+            ApiCrop c3{0, "Vaxböna", "Groucha", 1};
+            _api.Post(c1);
+            _api.Post(c2);
+            _api.Post(c3);
 
-            CoreCrop c4{2, "Vaxböna", "Grouchas", 1};
-            _core.Put(c4);
+            ApiCrop c4{2, "Vaxböna", "Grouchas", 1};
+            _api.Put(c4);
 
-            _core.Remove(1);
+            _api.Remove(1);
 
-            for(auto crop : _core.Get())
+            for(auto crop : _api.Get())
             {
                 std::cout << "Id:" << crop.id
                         << "\tName:" << crop.name
@@ -55,7 +53,8 @@ int main()
 {
     CropProductionManager::Infrastructure::CropRepository repository{};
     CropProductionManager::Core::CropCore core{repository};
-    CropProductionManager::Program program{core};
+    CropProductionManager::Api::CropApi api{core};
+    CropProductionManager::Program program{api};
 
     program.Run();
 
