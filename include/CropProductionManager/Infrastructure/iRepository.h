@@ -14,7 +14,5 @@ namespace CropProductionManager::Infrastructure
         virtual void Put(T) = 0;
         // DELETE
         virtual void Remove(int id) = 0;
-
-        virtual ~IRepository() {}
     };
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CropProductionManager/InternalModel/Api/crop.h"
+#include "CropProductionManager/ModelApi/crop.h"
 #include "CropProductionManager/InternalModel/Core/crop.h"
 #include "CropProductionManager/InternalModel/Infrastructure/crop.h"
 #include "CropProductionManager/Api/iApi.h"

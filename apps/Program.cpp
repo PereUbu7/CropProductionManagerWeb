@@ -3,10 +3,6 @@
 #include "CropProductionManager/Api/cropApi.h"
 
 #include <iostream>
-#include <ranges>
-
-#include <vector>
-#include <functional>
 
 namespace CropProductionManager
 {

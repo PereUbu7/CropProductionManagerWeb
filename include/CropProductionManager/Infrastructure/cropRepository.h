@@ -23,6 +23,5 @@ namespace CropProductionManager::Infrastructure
         void Remove(int id);
 
         CropRepository();
-        ~CropRepository();
     };
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CropProductionManager/InternalModel/Infrastructure/crop.h"
-#include "CropProductionManager/InternalModel/Api/crop.h"
+#include "CropProductionManager/ModelApi/crop.h"
 
 #include <string>
 

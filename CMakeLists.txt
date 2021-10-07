@@ -25,12 +25,12 @@ include(Warnings)
 find_lto(CXX)
 
 set(SOURCES
+    src/Infrastructure/repositoryFake.cpp
     src/Infrastructure/cropRepository.cpp
     src/Core/cropCore.cpp
     src/Api/cropApi.cpp
     src/InternalModel/Infrastructure/crop.cpp
     src/InternalModel/Core/crop.cpp
-    src/InternalModel/Api/crop.cpp
 )
 
 set(TESTFILES
