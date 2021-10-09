@@ -1,19 +1,14 @@
 #pragma once
 
 #include "CropProductionManager/Infrastructure/iRepository.h"
-#include "CropProductionManager/InternalModel/entity.h"
+#include "CropProductionManager/Concept/hasId.h"
 #include <vector>
 
 namespace CropProductionManager::Infrastructure
 {
-
-    template<typename T>
+    template<HasId T>
     class RepositoryFake : public CropProductionManager::Infrastructure::IRepository<T>
     {
-        using Entity = CropProductionManager::InternalModel::Entity;
-        
-        static_assert(std::is_base_of<Entity, T>::value, "T must derive from Entity");
-
     private:
         std::vector<T> entities;
     public:
@@ -25,7 +20,43 @@ namespace CropProductionManager::Infrastructure
         void Put(T entity);
         // DELETE
         void Remove(int id);
-
-        RepositoryFake();
     };
+
+    // GET
+    template<HasId T>
+    std::vector<T> RepositoryFake<T>::Get() const
+    {
+        return entities;
+    }
+    // POST
+    template<HasId T>
+    void RepositoryFake<T>::Post(T entity) 
+    {
+        entities.push_back(entity);
+    }
+    // PUT
+    template<HasId T>
+    void RepositoryFake<T>::Put(T entity) 
+    {
+        auto entityToModify
+        {
+            std::find_if(begin(entities), end(entities), [entity](T t){ return t.id == entity.id; })
+        };
+
+        if(entityToModify != end(entities))
+        {
+            (*entityToModify).Update(entity);
+        }
+    }
+    // DELETE
+    template<HasId T>
+    void RepositoryFake<T>::Remove(int id) 
+    { 
+        auto it = std::find_if(begin(entities), end(entities), [id](T entity){ return entity.id == id; });
+
+        if(it != end(entities))
+        {
+            entities.erase(it);
+        }
+    }
 }

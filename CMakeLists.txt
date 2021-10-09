@@ -25,7 +25,6 @@ include(Warnings)
 find_lto(CXX)
 
 set(SOURCES
-    src/Infrastructure/repositoryFake.cpp
     src/Infrastructure/cropRepository.cpp
     src/Core/cropCore.cpp
     src/Api/cropApi.cpp

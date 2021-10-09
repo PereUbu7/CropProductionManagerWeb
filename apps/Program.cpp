@@ -1,6 +1,9 @@
+#include "CropProductionManager/Infrastructure/repositoryFake.h"
 #include "CropProductionManager/Infrastructure/cropRepository.h"
 #include "CropProductionManager/Core/cropCore.h"
 #include "CropProductionManager/Api/cropApi.h"
+
+#include "CropProductionManager/InternalModel/Infrastructure/crop.h"
 
 #include <iostream>
 
@@ -47,7 +50,9 @@ namespace CropProductionManager
 
 int main()
 {
-    CropProductionManager::Infrastructure::CropRepository repository{};
+    namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;
+
+    CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
     CropProductionManager::Core::CropCore core{repository};
     CropProductionManager::Api::CropApi api{core};
     CropProductionManager::Program program{api};
