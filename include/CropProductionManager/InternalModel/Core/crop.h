@@ -9,6 +9,7 @@ namespace CropProductionManager::InternalModel::Core
 {
     using String = std::string;
     namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;
+    namespace Api = CropProductionManager::ModelApi;
 
     class Crop
     {

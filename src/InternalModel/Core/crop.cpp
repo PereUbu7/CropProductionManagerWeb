@@ -1,9 +1,11 @@
 #include "CropProductionManager/InternalModel/Core/crop.h"
 #include "CropProductionManager/InternalModel/Infrastructure/crop.h"
+#include "CropProductionManager/ModelApi/crop.h"
 
 namespace CropProductionManager::InternalModel::Core
 {
     namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;
+    namespace Api = CropProductionManager::ModelApi;
 
     void Crop::Update(const Crop crop)
     {

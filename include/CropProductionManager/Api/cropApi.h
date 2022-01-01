@@ -8,16 +8,14 @@
 
 namespace CropProductionManager::Api
 {
-    using Crop = CropProductionManager::InternalModel::Api::Crop;
+    using Crop = CropProductionManager::ModelApi::Crop;
     namespace Core = CropProductionManager::InternalModel::Core;
 
     class CropApi : public CropProductionManager::Api::IApi<Crop, Core::Crop>
     {
     protected:
         CropProductionManager::Core::ICore<Core::Crop, CropProductionManager::InternalModel::Infrastructure::Crop>& _core;
-        std::vector<Crop> crops;
 
-        static int createId();
     public:
         // GET
         std::vector<Crop> Get() const;

@@ -2,7 +2,7 @@
 
 namespace CropProductionManager::Api
 {
-    using Crop = CropProductionManager::InternalModel::Api::Crop;
+    using Crop = CropProductionManager::ModelApi::Crop;
     
     std::vector<Crop> CropApi::Get() const
     {

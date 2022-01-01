@@ -5,20 +5,25 @@
 
 #include "CropProductionManager/InternalModel/Infrastructure/crop.h"
 
+#include "CropProductionManager/Serializer/serializer.h"
+
 #include <iostream>
 
 namespace CropProductionManager
 {
     class Program
     {
-        using ApiCrop = CropProductionManager::InternalModel::Api::Crop;
+        using ApiCrop = CropProductionManager::ModelApi::Crop;
     
     private:
         CropProductionManager::Api::CropApi& _api;
+        CropProductionManager::Serializer::Serializer<ApiCrop>& _serializer;
 
     public:
-        Program(CropProductionManager::Api::CropApi& api) :
-            _api{api}
+        Program(CropProductionManager::Api::CropApi& api,
+            CropProductionManager::Serializer::Serializer<ApiCrop>& serializer) :
+            _api{api},
+            _serializer{serializer}
         {}
 
         void Run()
@@ -35,8 +40,13 @@ namespace CropProductionManager
 
             _api.Remove(1);
 
+            const auto j = nlohmann::json::parse("{\"name\":\"Majs\",\"variety\":\"Socker\",\"batch\":3}");
+            ApiCrop c5{_serializer.Deserialize(j)};
+            _api.Post(c5);
+
             for(auto crop : _api.Get())
             {
+                std::cout << _serializer.Serialize(crop) << '\t';
                 std::cout << "Id:" << crop.id
                         << "\tName:" << crop.name
                         << "\tVariety:" << crop.variety
@@ -52,10 +62,12 @@ int main()
 {
     namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;
 
+    CropProductionManager::Serializer::Serializer<CropProductionManager::ModelApi::Crop> serializer{};
+
     CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
     CropProductionManager::Core::CropCore core{repository};
     CropProductionManager::Api::CropApi api{core};
-    CropProductionManager::Program program{api};
+    CropProductionManager::Program program{api, serializer};
 
     program.Run();
 
