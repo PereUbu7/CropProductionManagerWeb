@@ -1,12 +1,26 @@
-#include "CropProductionManager/InternalModel/Infrastructure/crop.h"
+export module CropProductionManager.InternalModel.Infrastructure.Crop;
 
-namespace CropProductionManager::InternalModel::Infrastructure
+import <string>;
+
+export namespace CropProductionManager::InternalModel::Infrastructure
 {
-    void Crop::Update(Crop crop)
+    using String = std::string;
+
+    class Crop
     {
-        id = crop.id;
-        name = crop.name;
-        variety = crop.variety;
-        batch = crop.batch;
-    }
+    public:
+        int id;
+        String name;
+        String variety;
+        int batch;
+        void Update(Crop crop);
+    };
+}
+
+void CropProductionManager::InternalModel::Infrastructure::Crop::Update(Crop crop)
+{
+    id = crop.id;
+    name = crop.name;
+    variety = crop.variety;
+    batch = crop.batch;
 }

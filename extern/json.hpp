@@ -35,6 +35,7 @@ SOFTWARE.
 #define NLOHMANN_JSON_VERSION_PATCH 4
 
 #include <algorithm> // all_of, find, for_each
+// import <algorithm>;
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
 #include <initializer_list> // initializer_list
@@ -6722,9 +6723,9 @@ class lexer_base
         }
     }
 };
+
 /*!
 @brief lexical analysis
-
 This class organizes the lexical analysis during JSON deserialization.
 */
 template<typename BasicJsonType, typename InputAdapterType>
@@ -6792,7 +6793,8 @@ class lexer : public lexer_base<BasicJsonType>
         JSON_ASSERT(current == 'u');
         int codepoint = 0;
 
-        const auto factors = { 12u, 8u, 4u, 0u };
+        // const auto factors = { 12u, 8u, 4u, 0u };
+        const std::array<unsigned int, 4> factors{ { 12u, 8u, 4u, 0u } };
         for (const auto factor : factors)
         {
             get();

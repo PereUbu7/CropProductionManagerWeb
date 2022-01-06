@@ -1,13 +1,13 @@
-#include "CropProductionManager/Infrastructure/repositoryFake.h"
-#include "CropProductionManager/Infrastructure/cropRepository.h"
-#include "CropProductionManager/Core/cropCore.h"
-#include "CropProductionManager/Api/cropApi.h"
+import CropProductionManager.Infrastructure.RepositoryFake;
+import CropProductionManager.Infrastructure.CropRepository;
+import CropProductionManager.Core.CropCore;
+import CropProductionManager.Api.CropApi;
 
-#include "CropProductionManager/InternalModel/Infrastructure/crop.h"
+import CropProductionManager.InternalModel.Infrastructure.Crop;
 
-#include "CropProductionManager/Serializer/serializer.h"
+import CropProductionManager.Serializer.serializer;
 
-#include <iostream>
+import <iostream>;
 
 namespace CropProductionManager
 {

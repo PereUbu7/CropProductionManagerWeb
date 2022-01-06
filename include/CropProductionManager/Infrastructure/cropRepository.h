@@ -1,8 +1,10 @@
 #pragma once
 
-#include "CropProductionManager/InternalModel/Infrastructure/crop.h"
+import CropProductionMananger.InternalModel.Infrastructure.Crop;
+import <vector>;
+
 #include "CropProductionManager/Infrastructure/iRepository.h"
-#include <vector>
+
 
 namespace CropProductionManager::Infrastructure
 {

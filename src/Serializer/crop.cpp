@@ -1,4 +1,13 @@
-#include "CropProductionManager/Serializer/crop.h"
+export module CropProductionManager.ModelApi.Serialization;
+
+import CropProductionManager.ModelApi.Crop;
+import "json.hpp";
+
+export namespace CropProductionManager::ModelApi
+{
+    void to_json(nlohmann::json& j, const Crop& crop);
+    void from_json(const nlohmann::json& j, Crop& crop);
+}
 
 namespace CropProductionManager::ModelApi
 {

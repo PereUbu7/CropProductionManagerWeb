@@ -1,17 +1,17 @@
-#pragma once
-#include <string>
+// #pragma once
+// #include <string>
 
-namespace CropProductionManager::InternalModel::Infrastructure
-{
-    using String = std::string;
+// namespace CropProductionManager::InternalModel::Infrastructure
+// {
+//     using String = std::string;
 
-    class Crop
-    {
-    public:
-        int id;
-        String name;
-        String variety;
-        int batch;
-        void Update(Crop crop);
-    };
-}
+//     class Crop
+//     {
+//     public:
+//         int id;
+//         String name;
+//         String variety;
+//         int batch;
+//         void Update(Crop crop);
+//     };
+// }
