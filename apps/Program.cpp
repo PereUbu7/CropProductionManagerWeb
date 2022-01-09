@@ -7,6 +7,8 @@
 
 #include "CropProductionManager/Serializer/serializer.h"
 
+#include "CropProductionManager/Server/webServer.h"
+
 #include <iostream>
 
 namespace CropProductionManager
@@ -53,6 +55,8 @@ namespace CropProductionManager
                         << "\tBatch:" << crop.batch
                         << std::endl;
             }
+            Server::WebServer service{"0.0.0.0", 1984};
+            service.Setup();
         }
 
     };

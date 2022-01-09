@@ -31,6 +31,9 @@ set(SOURCES
     src/InternalModel/Infrastructure/crop.cpp
     src/InternalModel/Core/crop.cpp
     src/Serializer/crop.cpp
+    src/Server/webServer.cpp
+    src/Server/dnsHandler.cpp
+    src/Server/url.cpp
 )
 
 set(TESTFILES
@@ -46,7 +49,7 @@ add_library(${LIBRARY_NAME} OBJECT ${SOURCES})
 target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/extern/)
 
-target_link_libraries(${LIBRARY_NAME} PUBLIC doctest)
+target_link_libraries(${LIBRARY_NAME} PUBLIC doctest restbed)
 
 # target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
 
