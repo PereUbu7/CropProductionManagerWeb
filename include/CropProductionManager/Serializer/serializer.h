@@ -16,7 +16,7 @@ namespace CropProductionManager::Serializer
         json j;
     public:
         Serializer& Serialize(const T& obj);
-        T Deserialize(const json& json);
+        T Deserialize(const std::string& json);
         json GetJson() const;
     };
 
@@ -29,9 +29,9 @@ namespace CropProductionManager::Serializer
     }
 
     template<typename T>
-    T Serializer<T>::Deserialize(const json& json)
+    T Serializer<T>::Deserialize(const std::string& json)
     {
-        j = json;
+        j = json::parse(json);
 
         return j.get<T>();
     }

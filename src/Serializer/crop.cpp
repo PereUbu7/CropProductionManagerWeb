@@ -1,5 +1,7 @@
 #include "CropProductionManager/Serializer/crop.h"
 
+#include <iostream>
+
 namespace CropProductionManager::ModelApi
 {
     void to_json(nlohmann::json& j, const Crop& crop)

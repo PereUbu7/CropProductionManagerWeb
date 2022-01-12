@@ -42,8 +42,7 @@ namespace CropProductionManager
 
             _api.Remove(1);
 
-            const auto j = nlohmann::json::parse("{\"name\":\"Majs\",\"variety\":\"Socker\",\"batch\":3}");
-            ApiCrop c5{_serializer.Deserialize(j)};
+            ApiCrop c5{_serializer.Deserialize("{\"name\":\"Majs\",\"variety\":\"Socker\",\"batch\":3}")};
             _api.Post(c5);
 
             for(auto crop : _api.Get())

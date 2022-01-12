@@ -42,20 +42,15 @@ namespace CropProductionManager::Server
         }
     }
 
-    void WebServer::get_method_handler(const shared_ptr<Session> session)
-    {
-        auto request = session->get_request();
-        Utils::Url uri(request->get_header("Host", ""));
-        cout << uri << std::endl;
-
-        session->close(OK, "Hello, World!", {{"Content-Length", "13"}});
-    }
-
     void WebServer::Setup()
     {
-        auto resource = make_shared<Resource>();
-        resource->set_path("/resource");
-        resource->set_method_handler("GET", get_method_handler);
+        auto cropResource = make_shared<Resource>();
+        cropResource->set_path("/crop");
+        cropResource->set_method_handler("GET", RequestHandler::CropMethod::Get);
+        cropResource->set_method_handler("POST", RequestHandler::CropMethod::Post);
+        CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
+        RequestHandler::CropImpl cropImpl{repository};
+        RequestHandler::CropMethod::implementationHolder = make_unique<RequestHandler::CropImpl>(cropImpl);
 
         auto settings = make_shared<Settings>();
         settings->set_port(_port);
@@ -66,8 +61,8 @@ namespace CropProductionManager::Server
 
         auto dnsHandler = make_shared<DnsHandler>(".*mysite.blaj.*");
         service.add_rule(dnsHandler);
-        service.set_authentication_handler(authentication_handler);
-        service.publish(resource);
+        // service.set_authentication_handler(authentication_handler);
+        service.publish(cropResource);
         service.start(settings);
     }
 }

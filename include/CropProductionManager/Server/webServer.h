@@ -1,4 +1,10 @@
-#include "dnsHandler.h"
+#pragma once
+
+#include "CropProductionManager/Server/dnsHandler.h"
+
+#include "CropProductionManager/Server/RequestHandler/crop.h"
+
+#include "CropProductionManager/Infrastructure/repositoryFake.h"
 
 #include <iostream>
 #include <memory>
@@ -10,6 +16,7 @@ namespace CropProductionManager::Server
 {
     using namespace restbed;
     using namespace std;
+    using namespace RequestHandler;
 
     class WebServer
     {

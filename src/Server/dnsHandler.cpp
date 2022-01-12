@@ -15,13 +15,13 @@ namespace CropProductionManager::Server
         cout << uri << std::endl;
         if (regex_match(uri.GetHost(), regex(_dns)))
         {
-            cout << "Matched DNS" << endl;
-            return true;
+            cout << "Matched DNS\n";
+            return false;
         }
         else
         {
-            cout << "Not matched DNS" << endl;
-            return false;
+            cout << "Not matched DNS - invoking action\n";
+            return true;
         }
     }
 
@@ -29,6 +29,7 @@ namespace CropProductionManager::Server
         const std::shared_ptr<Session> session,
         const std::function<void(const std::shared_ptr<Session>)> &callback)
     {
+        std::cout << "action: 404 - NOT FOUND\n";
         session->close(NOT_FOUND, "");
     }
 }

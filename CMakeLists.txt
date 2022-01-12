@@ -34,6 +34,7 @@ set(SOURCES
     src/Server/webServer.cpp
     src/Server/dnsHandler.cpp
     src/Server/url.cpp
+    src/Server/RequestHandler/crop.cpp
 )
 
 set(TESTFILES
