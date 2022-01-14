@@ -8,6 +8,7 @@ namespace CropProductionManager::ModelApi
     {
         j = nlohmann::json
         {
+            {"id", crop.id},
             {"name", crop.name},
             {"variety", crop.variety},
             {"batch", crop.batch}
@@ -16,6 +17,7 @@ namespace CropProductionManager::ModelApi
 
     void from_json(const nlohmann::json& j, Crop& crop)
     {
+        j.at("id").get_to(crop.id);
         j.at("name").get_to(crop.name);
         j.at("variety").get_to(crop.variety);
         j.at("batch").get_to(crop.batch);
