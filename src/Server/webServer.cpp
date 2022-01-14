@@ -45,7 +45,7 @@ namespace CropProductionManager::Server
     void WebServer::Setup()
     {
         auto cropResource = make_shared<Resource>();
-        cropResource->set_path("/crop");
+        cropResource->set_paths({"/crop", "/crop/{id: [0-9]*}"});
         cropResource->set_method_handler("GET", RequestHandler::CropMethod::Get);
         cropResource->set_method_handler("POST", RequestHandler::CropMethod::Post);
         CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
@@ -55,7 +55,11 @@ namespace CropProductionManager::Server
         auto settings = make_shared<Settings>();
         settings->set_port(_port);
         settings->set_bind_address(_ip);
-        settings->set_default_header("Connection", "close");
+        settings->set_default_headers({
+            {"Connection", "close"},
+            {"Content-Type", "application/json"} 
+        });
+        
 
         Service service;
 
