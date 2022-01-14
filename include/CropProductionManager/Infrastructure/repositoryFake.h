@@ -3,6 +3,7 @@
 #include "CropProductionManager/Infrastructure/iRepository.h"
 #include "CropProductionManager/Concept/hasId.h"
 #include <vector>
+#include <stdexcept>
 
 namespace CropProductionManager::Infrastructure
 {
@@ -14,6 +15,7 @@ namespace CropProductionManager::Infrastructure
     public:
         // GET
         std::vector<T> Get() const;
+        T Get(const int id) const;
         // POST
         void Post(T entity);
         // PUT
@@ -27,6 +29,16 @@ namespace CropProductionManager::Infrastructure
     std::vector<T> RepositoryFake<T>::Get() const
     {
         return entities;
+    }
+    template<HasId T>
+    T RepositoryFake<T>::Get(const int id) const
+    {
+        auto foundEntities{std::find_if(begin(entities), end(entities), [id](T entity){ return entity.id == id; })};
+        if(foundEntities != end(entities))
+        {
+            return foundEntities[0];
+        }
+        throw std::invalid_argument("not found");;
     }
     // POST
     template<HasId T>

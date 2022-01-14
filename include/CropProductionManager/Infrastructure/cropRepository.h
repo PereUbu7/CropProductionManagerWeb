@@ -15,6 +15,7 @@ namespace CropProductionManager::Infrastructure
     public:
         // GET
         std::vector<Crop> Get() const;
+        Crop Get(const int id) const;
         // POST
         void Post(Crop crop);
         // PUT

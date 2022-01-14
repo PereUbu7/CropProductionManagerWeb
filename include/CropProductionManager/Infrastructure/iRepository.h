@@ -8,6 +8,7 @@ namespace CropProductionManager::Infrastructure
     {
     public:
         virtual std::vector<T> Get() const = 0;
+        virtual T Get(const int id) const = 0;
         // POST
         virtual void Post(T) = 0;
         // PUT

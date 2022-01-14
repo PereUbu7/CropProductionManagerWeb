@@ -4,6 +4,7 @@
 #include "CropProductionManager/Infrastructure/iRepository.h"
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 
 namespace CropProductionManager::Infrastructure
 {
@@ -15,6 +16,15 @@ namespace CropProductionManager::Infrastructure
     std::vector<Crop> CropRepository::Get() const
     {
         return crops;
+    }
+    Crop CropRepository::Get(const int id) const
+    {
+        auto foundCrops{std::find_if(begin(crops), end(crops), [id](Crop c){ return c.id == id; })};
+        if(foundCrops != end(crops))
+        {
+            return foundCrops[0];
+        }
+        throw std::invalid_argument("not found");
     }
     // POST
     void CropRepository::Post(Crop crop) 

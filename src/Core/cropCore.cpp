@@ -20,6 +20,11 @@ namespace CropProductionManager::Core
 
         return crops;
     } 
+    Crop CropCore::Get(const int id) const
+    {
+        Infrastructure::Crop infraCrop{_repository.Get(id)};
+        return Crop::FromInfrastructure(infraCrop);
+    }
     Crop CropCore::Post(Crop& crop)
     {
         crop.id = CropCore::createId();

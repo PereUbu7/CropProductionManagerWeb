@@ -20,6 +20,7 @@ namespace CropProductionManager::Core
     public:
         // GET
         std::vector<Crop> Get() const;
+        Crop Get(const int id) const;
         // POST
         Crop Post(Crop& crop);
         // PUT

@@ -12,11 +12,9 @@ namespace CropProductionManager::Core
 
     public:
         virtual std::vector<T> Get() const = 0;
-        // POST
+        virtual T Get(const int id) const = 0;
         virtual T Post(T&) = 0;
-        // PUT
         virtual void Put(T&) = 0;
-        // DELETE
         virtual void Remove(int id) = 0;
 
         virtual TInfrastructure ToInfrastructure(T& c) const = 0;
