@@ -5,7 +5,7 @@ namespace CropProductionManager::InternalModel::Infrastructure
 {
     using String = std::string;
 
-    class Crop
+    class Crop final
     {
     public:
         int id;

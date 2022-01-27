@@ -7,11 +7,11 @@
 namespace CropProductionManager::Server
 {
     using namespace restbed;
-    class DnsHandler : public Rule 
+    class DnsHandler final : public Rule 
     {
         public:
             DnsHandler(std::string dns);
-            ~DnsHandler();
+            ~DnsHandler() = default;
             bool condition(const std::shared_ptr<Session> session) override;
             void action(
             const std::shared_ptr<Session> session,

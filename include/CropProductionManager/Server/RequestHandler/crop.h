@@ -15,7 +15,7 @@
 namespace CropProductionManager::Server::RequestHandler
 {
     namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;
-    class CropImpl
+    class CropImpl final
     {
     public:
         CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop> &Repository;

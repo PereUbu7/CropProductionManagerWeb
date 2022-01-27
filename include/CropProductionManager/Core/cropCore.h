@@ -10,7 +10,7 @@ namespace CropProductionManager::Core
     namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;
     using IRepository = CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop>;
 
-    class CropCore : public CropProductionManager::Core::ICore<Crop, Infrastructure::Crop>
+    class CropCore final : public CropProductionManager::Core::ICore<Crop, Infrastructure::Crop>
     {
     protected:
         CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop>& _repository;

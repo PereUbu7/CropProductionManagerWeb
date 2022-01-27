@@ -3,7 +3,7 @@
 
 namespace CropProductionManager::Server::Utils
 {
-    class Url
+    class Url final
     {
     private:
         std::string url;

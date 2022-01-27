@@ -8,7 +8,7 @@ namespace CropProductionManager::Infrastructure
 {
     using Crop = CropProductionManager::InternalModel::Infrastructure::Crop;
 
-    class CropRepository : public CropProductionManager::Infrastructure::IRepository<Crop>
+    class CropRepository final : public CropProductionManager::Infrastructure::IRepository<Crop>
     {
     private:
         std::vector<Crop> crops;
@@ -22,7 +22,5 @@ namespace CropProductionManager::Infrastructure
         void Put(Crop crop);
         // DELETE
         void Remove(int id);
-
-        CropRepository();
     };
 }

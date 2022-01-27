@@ -10,8 +10,6 @@ namespace CropProductionManager::Infrastructure
 {
     using Crop = CropProductionManager::InternalModel::Infrastructure::Crop;
 
-    CropRepository::CropRepository() {}
-
     // GET
     std::vector<Crop> CropRepository::Get() const
     {

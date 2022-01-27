@@ -11,7 +11,7 @@ namespace CropProductionManager::Api
     using Crop = CropProductionManager::ModelApi::Crop;
     namespace Core = CropProductionManager::InternalModel::Core;
 
-    class CropApi : public CropProductionManager::Api::IApi<Crop, Core::Crop>
+    class CropApi final : public CropProductionManager::Api::IApi<Crop, Core::Crop>
     {
     protected:
         CropProductionManager::Core::ICore<Core::Crop, CropProductionManager::InternalModel::Infrastructure::Crop>& _core;

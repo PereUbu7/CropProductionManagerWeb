@@ -11,7 +11,7 @@ namespace CropProductionManager::InternalModel::Core
     namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;
     namespace Api = CropProductionManager::ModelApi;
 
-    class Crop
+    class Crop final
     {
     public:
         int id;

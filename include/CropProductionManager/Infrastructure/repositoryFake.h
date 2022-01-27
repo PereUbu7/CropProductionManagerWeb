@@ -4,11 +4,12 @@
 #include "CropProductionManager/Concept/hasId.h"
 #include <vector>
 #include <stdexcept>
+#include <iostream>
 
 namespace CropProductionManager::Infrastructure
 {
     template<HasId T>
-    class RepositoryFake : public CropProductionManager::Infrastructure::IRepository<T>
+    class RepositoryFake final : public CropProductionManager::Infrastructure::IRepository<T>
     {
     private:
         std::vector<T> entities;

@@ -10,7 +10,7 @@ namespace CropProductionManager::Serializer
     using json = nlohmann::json;
 
     template<typename T>
-    class Serializer
+    class Serializer final
     {
     private:
         json j;

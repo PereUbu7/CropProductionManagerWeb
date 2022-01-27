@@ -7,6 +7,13 @@ namespace CropProductionManager::Infrastructure
     class IRepository
     {
     public:
+        virtual ~IRepository() = default;
+	    IRepository() = default;
+	    IRepository(const IRepository &) = default;
+	    IRepository& operator=(const IRepository&) = default;
+	    IRepository(IRepository &&) = default;
+	    IRepository& operator=(IRepository &&) = default;
+
         virtual std::vector<T> Get() const = 0;
         virtual T Get(const int id) const = 0;
         // POST

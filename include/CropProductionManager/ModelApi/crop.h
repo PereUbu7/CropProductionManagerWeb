@@ -6,7 +6,7 @@ namespace CropProductionManager::ModelApi
 {
     using String = std::string;
 
-    class Crop
+    class Crop final
     {
     public:
         Crop() = default;

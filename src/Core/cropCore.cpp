@@ -15,7 +15,7 @@ namespace CropProductionManager::Core
         crops.reserve(infraCrops.size());
         for(auto crop : infraCrops) 
         { 
-            crops.push_back(std::move(Crop::FromInfrastructure(crop)));
+            crops.push_back(Crop::FromInfrastructure(crop));
         }
 
         return crops;

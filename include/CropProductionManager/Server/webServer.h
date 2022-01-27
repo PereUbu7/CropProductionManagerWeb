@@ -18,7 +18,7 @@ namespace CropProductionManager::Server
     using namespace std;
     using namespace RequestHandler;
 
-    class WebServer
+    class WebServer final
     {
         public:
             WebServer(const string ip, const uint16_t port);
@@ -30,5 +30,6 @@ namespace CropProductionManager::Server
         private:
             const string _ip;
             const uint16_t _port;
+            shared_ptr<Resource> addCropResource(CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop> &repo);
     };
 }

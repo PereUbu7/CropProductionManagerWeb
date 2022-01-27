@@ -6,7 +6,6 @@ namespace CropProductionManager::Server
     DnsHandler::DnsHandler(std::string dns) :
     _dns{dns} {}
     
-    DnsHandler::~DnsHandler(void) { return; }
     bool DnsHandler::condition(const std::shared_ptr<Session> session)
     {
         const auto request = session->get_request();
