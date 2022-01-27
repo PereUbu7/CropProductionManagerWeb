@@ -33,13 +33,35 @@ namespace CropProductionManager::Core
 
         return crop;
     }
-    void CropCore::Put(Crop& crop)
-    {
+    void CropCore::Put(Crop& crop, const std::string &id)
+    {        
+        try
+        {
+            // If id is supplied by argument, overwrite
+            int idArg = std::stoi(id);
+            crop.id = idArg;
+        }
+        catch(const std::invalid_argument& e)
+        {
+            std::cerr << "Error: " << e.what() << '\n';
+        }
+        std::cout << "In Core Put, id is: " << crop.id << '\n';
+        
         _repository.Put(crop.ToInfrastructure());
     }
-    void CropCore::Remove(int id)
+    void CropCore::Remove(const std::string &id)
     {
-        _repository.Remove(id);
+        try
+        {
+            int idArg = std::stoi(id);
+            std::cout << "In Core Remove, id is: " << id << '\n';
+            _repository.Remove(0);
+        }
+        // TODO: Return something useful to web server if this happens
+        catch(const std::invalid_argument& e)
+        {
+            std::cerr << "Error: " << e.what() << '\n';
+        }
     }
 
     Infrastructure::Crop CropCore::ToInfrastructure(Crop& c) const

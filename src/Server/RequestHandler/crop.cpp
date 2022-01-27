@@ -80,7 +80,6 @@ namespace CropProductionManager::Server::RequestHandler::CropMethod
 
     void Put(const shared_ptr<Session> session)
     {
-        std::cout << "Put request\n";
         auto request = session->get_request();
 
         int content_length{};
@@ -89,30 +88,19 @@ namespace CropProductionManager::Server::RequestHandler::CropMethod
         session->fetch(content_length, [](const shared_ptr<Session> session, const Bytes &body) {});
 
         auto byteBody = request->get_body();
-        std::cout << "body length: " << byteBody.size() << '\n';
         string body(byteBody.begin(), byteBody.end());
 
-        for (auto c : byteBody)
-        {
-            std::cout << c;
-        }
-        std::cout << '\n';
-
-        std::cout << "Path: " << request->get_path() << "\n";
-        std::cout << "Has id: " << request->has_path_parameter("id") << "\n";
-        std::cout << "Body: " << body << '\n';
         // Post actual data
         CropProductionManager::Serializer::Serializer<CropProductionManager::ModelApi::Crop> serializer{};
 
         CropProductionManager::Core::CropCore core{implementationHolder->Repository};
         CropProductionManager::Api::CropApi api{core};
 
-        api.Put(serializer.Deserialize(body));
+        api.Put(serializer.Deserialize(body), request->get_path_parameter("id", ""));
     }
 
     void Delete(const shared_ptr<Session> session)
     {
-        std::cout << "Delete request\n";
         auto request = session->get_request();
 
         int content_length{};
@@ -120,24 +108,12 @@ namespace CropProductionManager::Server::RequestHandler::CropMethod
 
         session->fetch(content_length, [](const shared_ptr<Session> session, const Bytes &body) {});
 
-        auto byteBody = request->get_body();
-        std::cout << "body length: " << byteBody.size() << '\n';
-        string body(byteBody.begin(), byteBody.end());
-
-        for (auto c : byteBody)
-        {
-            std::cout << c;
-        }
-        std::cout << '\n';
-
-        std::cout << "Path: " << request->get_path() << "\n";
-        std::cout << "Body: " << body << '\n';
-        // Post actual data
+        // Delete actual data
         CropProductionManager::Serializer::Serializer<CropProductionManager::ModelApi::Crop> serializer{};
 
         CropProductionManager::Core::CropCore core{implementationHolder->Repository};
         CropProductionManager::Api::CropApi api{core};
 
-        api.Put(serializer.Deserialize(body));
+        api.Remove(request->get_path_parameter("id", ""));
     }
 }

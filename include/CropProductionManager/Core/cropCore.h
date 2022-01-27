@@ -24,9 +24,9 @@ namespace CropProductionManager::Core
         // POST
         Crop Post(Crop& crop);
         // PUT
-        void Put(Crop& crop);
+        void Put(Crop& crop, const std::string &id);
         // DELETE
-        void Remove(int id);
+        void Remove(const std::string &id);
 
         Infrastructure::Crop ToInfrastructure(Crop& c) const;
 

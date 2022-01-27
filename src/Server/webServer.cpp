@@ -71,6 +71,8 @@ namespace CropProductionManager::Server
         cropResource->set_paths({"/crop", "/crop/{id: [0-9]*}"});
         cropResource->set_method_handler("GET", RequestHandler::CropMethod::Get);
         cropResource->set_method_handler("POST", RequestHandler::CropMethod::Post);
+        cropResource->set_method_handler("PUT", RequestHandler::CropMethod::Put);
+        cropResource->set_method_handler("DELETE", RequestHandler::CropMethod::Delete);
         RequestHandler::CropImpl cropImpl{repo};
         RequestHandler::CropMethod::implementationHolder = std::make_unique<RequestHandler::CropImpl>(cropImpl);
         return cropResource;

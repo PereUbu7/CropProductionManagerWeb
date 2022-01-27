@@ -21,8 +21,8 @@ namespace CropProductionManager::Core
         virtual std::vector<T> Get() const = 0;
         virtual T Get(const int id) const = 0;
         virtual T Post(T&) = 0;
-        virtual void Put(T&) = 0;
-        virtual void Remove(int id) = 0;
+        virtual void Put(T&, const std::string &id) = 0;
+        virtual void Remove(const std::string &id) = 0;
 
         virtual TInfrastructure ToInfrastructure(T& c) const = 0;
     };

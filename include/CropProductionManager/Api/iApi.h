@@ -20,7 +20,7 @@ namespace CropProductionManager::Api
         virtual std::vector<T> Get() const = 0;
         virtual T Get(const int id) const = 0;
         virtual T Post(const T&) = 0;
-        virtual void Put(const T&) = 0;
-        virtual void Remove(int id) = 0;
+        virtual void Put(const T&, const std::string &id) = 0;
+        virtual void Remove(const std::string &id) = 0;
     };
 }

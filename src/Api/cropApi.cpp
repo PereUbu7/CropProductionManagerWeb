@@ -29,12 +29,12 @@ namespace CropProductionManager::Api
 
         return crop;
     }
-    void CropApi::Put(const Crop& crop)
+    void CropApi::Put(const Crop& crop, const std::string &id)
     {
         auto coreCrop{ Core::Crop::FromApi(crop) };
-        _core.Put(coreCrop);
+        _core.Put(coreCrop, id);
     }
-    void CropApi::Remove(int id)
+    void CropApi::Remove(const std::string &id)
     {
         _core.Remove(id);
     }

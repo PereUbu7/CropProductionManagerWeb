@@ -2,6 +2,7 @@
 #include "CropProductionManager/InternalModel/Infrastructure/crop.h"
 #include "CropProductionManager/ModelApi/crop.h"
 
+
 namespace CropProductionManager::InternalModel::Core
 {
     namespace Infrastructure = CropProductionManager::InternalModel::Infrastructure;

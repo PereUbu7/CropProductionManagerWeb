@@ -23,9 +23,9 @@ namespace CropProductionManager::Api
         // POST
         Crop Post(const Crop& crop);
         // PUT
-        void Put(const Crop& crop);
+        void Put(const Crop& crop, const std::string &id);
         // DELETE
-        void Remove(int id);
+        void Remove(const std::string &id);
 
         CropApi(CropProductionManager::Core::ICore<Core::Crop, CropProductionManager::InternalModel::Infrastructure::Crop>& core):
             _core{core} {}
