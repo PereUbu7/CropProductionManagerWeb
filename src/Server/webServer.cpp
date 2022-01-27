@@ -44,13 +44,8 @@ namespace CropProductionManager::Server
 
     void WebServer::Setup()
     {
-        auto cropResource = make_shared<Resource>();
-        cropResource->set_paths({"/crop", "/crop/{id: [0-9]*}"});
-        cropResource->set_method_handler("GET", RequestHandler::CropMethod::Get);
-        cropResource->set_method_handler("POST", RequestHandler::CropMethod::Post);
         CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
-        RequestHandler::CropImpl cropImpl{repository};
-        RequestHandler::CropMethod::implementationHolder = make_unique<RequestHandler::CropImpl>(cropImpl);
+        const auto cropResource = addCropResource(repository);
 
         auto settings = make_shared<Settings>();
         settings->set_port(_port);
@@ -68,5 +63,16 @@ namespace CropProductionManager::Server
         // service.set_authentication_handler(authentication_handler);
         service.publish(cropResource);
         service.start(settings);
+    }
+
+    shared_ptr<Resource> WebServer::addCropResource(CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop> &repo)
+    {
+        auto cropResource = make_shared<Resource>();
+        cropResource->set_paths({"/crop", "/crop/{id: [0-9]*}"});
+        cropResource->set_method_handler("GET", RequestHandler::CropMethod::Get);
+        cropResource->set_method_handler("POST", RequestHandler::CropMethod::Post);
+        RequestHandler::CropImpl cropImpl{repo};
+        RequestHandler::CropMethod::implementationHolder = std::make_unique<RequestHandler::CropImpl>(cropImpl);
+        return cropResource;
     }
 }
