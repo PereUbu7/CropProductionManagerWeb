@@ -1,0 +1,3 @@
+curl --header "Content-Type: application/json"   --request POST   --data '{"name":"Broccoli","variety":"Gnöuda","batch":2,"id":0}'   http://www.mysite.blaj.se:1984/crop
+
+curl --header "Content-Type: application/json"   --request GET  http://www.mysite.blaj.se:1984/crop/0
