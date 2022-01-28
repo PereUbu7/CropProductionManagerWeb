@@ -13,7 +13,7 @@ namespace CropProductionManager::Server::RequestHandler::CropMethod
         {
             auto request = session->get_request();
 
-            int requestedId = std::stoi(request->get_path_parameter("id", "0"));
+            auto requestedId = std::stoi(request->get_path_parameter("id", "0"));
 
             // Get actual data
 
@@ -57,7 +57,7 @@ namespace CropProductionManager::Server::RequestHandler::CropMethod
             session->fetch(content_length, [](const shared_ptr<Session> session, const Bytes &body) {});
 
             auto byteBody = request->get_body();
-            string body(byteBody.begin(), byteBody.end());
+            auto body = string(byteBody.begin(), byteBody.end());
 
             // Post actual data
             CropProductionManager::Serializer::Serializer<CropProductionManager::ModelApi::Crop> serializer{};
@@ -88,7 +88,7 @@ namespace CropProductionManager::Server::RequestHandler::CropMethod
         session->fetch(content_length, [](const shared_ptr<Session> session, const Bytes &body) {});
 
         auto byteBody = request->get_body();
-        string body(byteBody.begin(), byteBody.end());
+        auto body = string(byteBody.begin(), byteBody.end());
 
         // Post actual data
         CropProductionManager::Serializer::Serializer<CropProductionManager::ModelApi::Crop> serializer{};

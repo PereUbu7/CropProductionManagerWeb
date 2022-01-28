@@ -12,6 +12,6 @@ namespace CropProductionManager::InternalModel::Infrastructure
         String name;
         String variety;
         int batch;
-        void Update(Crop crop);
+        void Update(const Crop& crop);
     };
 }

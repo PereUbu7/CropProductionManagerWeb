@@ -11,7 +11,7 @@ namespace CropProductionManager::Core
     {
         std::vector<Infrastructure::Crop> infraCrops{_repository.Get()};
 
-        std::vector<Crop> crops{};
+        auto crops = std::vector<Crop>{};
         crops.reserve(infraCrops.size());
         for(auto crop : infraCrops) 
         { 
@@ -22,7 +22,7 @@ namespace CropProductionManager::Core
     } 
     Crop CropCore::Get(const int id) const
     {
-        Infrastructure::Crop infraCrop{_repository.Get(id)};
+        auto infraCrop = Infrastructure::Crop{_repository.Get(id)};
         return Crop::FromInfrastructure(infraCrop);
     }
     Crop CropCore::Post(Crop& crop)
@@ -38,7 +38,7 @@ namespace CropProductionManager::Core
         try
         {
             // If id is supplied by argument, overwrite
-            int idArg = std::stoi(id);
+            auto idArg = std::stoi(id);
             crop.id = idArg;
         }
         catch(const std::invalid_argument& e)
@@ -53,7 +53,7 @@ namespace CropProductionManager::Core
     {
         try
         {
-            int idArg = std::stoi(id);
+            auto idArg = std::stoi(id);
             std::cout << "In Core Remove, id is: " << id << '\n';
             _repository.Remove(0);
         }
@@ -71,7 +71,7 @@ namespace CropProductionManager::Core
 
     int CropCore::createId()
     {
-        static int id{0};
+        static auto id{0u};
 
         return id++;
     }

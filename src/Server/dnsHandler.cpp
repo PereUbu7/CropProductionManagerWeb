@@ -10,7 +10,7 @@ namespace CropProductionManager::Server
     {
         const auto request = session->get_request();
 
-        Utils::Url uri(request->get_header("Host", ""));
+        auto uri = Utils::Url(request->get_header("Host", ""));
         cout << uri << std::endl;
         if (regex_match(uri.GetHost(), regex(_dns)))
         {

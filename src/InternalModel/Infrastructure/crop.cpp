@@ -2,7 +2,7 @@
 
 namespace CropProductionManager::InternalModel::Infrastructure
 {
-    void Crop::Update(Crop crop)
+    void Crop::Update(const Crop& crop)
     {
         id = crop.id;
         name = crop.name;

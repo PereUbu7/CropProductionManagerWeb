@@ -19,7 +19,7 @@ namespace CropProductionManager::InternalModel::Core
         String variety;
         int batch;
 
-        Crop(int id, String name, String variety, int batch) :
+        Crop(int id, const String& name, const String& variety, int batch) :
             id{id},
             name{name},
             variety{variety},
@@ -41,10 +41,10 @@ namespace CropProductionManager::InternalModel::Core
         { 
         }
 
-        void Update(Crop crop);
+        void Update(const Crop& crop);
         Infrastructure::Crop ToInfrastructure();
         Api::Crop ToApi();
-        Crop static FromInfrastructure(Infrastructure::Crop crop);
-        Crop static FromApi(Api::Crop crop);
+        Crop static FromInfrastructure(const Infrastructure::Crop& crop);
+        Crop static FromApi(const Api::Crop& crop);
     };
 }

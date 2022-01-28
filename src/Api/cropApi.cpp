@@ -6,9 +6,9 @@ namespace CropProductionManager::Api
     
     std::vector<Crop> CropApi::Get() const
     {
-        std::vector<Core::Crop> coreCrops{_core.Get()};
+        auto coreCrops = std::vector<Core::Crop>{_core.Get()};
 
-        std::vector<Crop> crops{};
+        auto crops = std::vector<Crop>{};
         crops.reserve(coreCrops.size());
         for(auto crop : coreCrops) 
         { 
@@ -19,7 +19,7 @@ namespace CropProductionManager::Api
     } 
     Crop CropApi::Get(const int id) const
     {
-        Core::Crop coreCrop{_core.Get(id)};
+        auto coreCrop = Core::Crop{_core.Get(id)};
         return coreCrop.ToApi();
     }
     Crop CropApi::Post(const Crop& crop)
