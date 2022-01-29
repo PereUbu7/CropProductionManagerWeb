@@ -50,7 +50,7 @@ add_library(${LIBRARY_NAME} OBJECT ${SOURCES})
 target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/extern/)
 
-target_link_libraries(${LIBRARY_NAME} PUBLIC doctest restbed)
+target_link_libraries(${LIBRARY_NAME} PUBLIC doctest restbed mysqlcppconn)
 
 # target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
 

@@ -44,7 +44,8 @@ namespace CropProductionManager::Server
 
     void WebServer::Setup()
     {
-        CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
+        // CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
+        CropProductionManager::Infrastructure::CropRepository repository{};
         const auto cropResource = addCropResource(repository);
 
         auto settings = make_shared<Settings>();

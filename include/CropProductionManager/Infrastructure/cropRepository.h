@@ -3,6 +3,13 @@
 #include "CropProductionManager/InternalModel/Infrastructure/crop.h"
 #include "CropProductionManager/Infrastructure/iRepository.h"
 #include <vector>
+#include <algorithm>
+#include <stdexcept>
+#include <mysql_connection.h>
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
 
 namespace CropProductionManager::Infrastructure
 {
@@ -13,6 +20,7 @@ namespace CropProductionManager::Infrastructure
     private:
         std::vector<Crop> crops;
     public:
+        CropRepository();
         // GET
         std::vector<Crop> Get() const;
         Crop Get(const int id) const;
