@@ -3,8 +3,8 @@
 
 namespace CropProductionManager::Server
 {
-    WebServer::WebServer(const string ip, const uint16_t port) :
-        _ip{ip}, _port{port} {}
+    WebServer::WebServer(IConfiguration config) :
+        _ip{config["server"]}, _port{config["port"]} {}
 
     string WebServer::build_authenticate_header(void)
     {
@@ -43,14 +43,8 @@ namespace CropProductionManager::Server
         }
     }
 
-    void WebServer::Setup()
+    void WebServer::Setup(IConfiguration& config)
     {
-        auto completePath = std::string{getCurrentPath() + std::string("/appconfig.json")};
-        auto i = std::ifstream(completePath);
-        
-        auto config = IConfiguration(i);
-
-        // CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
         CropProductionManager::Infrastructure::CropRepository repository{config["databaseConnection"]};
         const auto cropResource = addCropResource(repository);
 
@@ -65,7 +59,7 @@ namespace CropProductionManager::Server
 
         Service service;
 
-        auto dnsHandler = make_shared<DnsHandler>(".*mysite.blaj.*");
+        auto dnsHandler = make_shared<DnsHandler>(config["service"]["dnsMatcher"]);
         service.add_rule(dnsHandler);
         // service.set_authentication_handler(authentication_handler);
         service.publish(cropResource);
@@ -83,16 +77,5 @@ namespace CropProductionManager::Server
         RequestHandler::CropImpl cropImpl{repo};
         RequestHandler::CropMethod::implementationHolder = std::make_unique<RequestHandler::CropImpl>(cropImpl);
         return cropResource;
-    }
-
-    std::string WebServer::getCurrentPath()
-    {
-        char result[200];
-        ssize_t count = readlink("/proc/self/exe", result, 200);
-        if(count != -1)
-        {
-            return std::string{dirname(result)};
-        }
-        return std::string{};
     }
 }

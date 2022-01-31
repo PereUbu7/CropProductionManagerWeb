@@ -11,9 +11,7 @@
 #include <cstdlib>
 #include <restbed>
 #include <regex>
-#include <libgen.h>
-#include <unistd.h>
-#include <linux/limits.h>
+
 
 namespace CropProductionManager::Server
 {
@@ -24,8 +22,8 @@ namespace CropProductionManager::Server
     class WebServer final
     {
         public:
-            WebServer(const string ip, const uint16_t port);
-            void Setup();
+            WebServer(IConfiguration config);
+            void Setup(IConfiguration& config);
             static string build_authenticate_header(void);
             static void authentication_handler(const shared_ptr<Session> session,
                                 const function<void(const shared_ptr<Session>)> &callback);
@@ -34,6 +32,5 @@ namespace CropProductionManager::Server
             const string _ip;
             const uint16_t _port;
             shared_ptr<Resource> addCropResource(CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop> &repo);
-            std::string getCurrentPath();
     };
 }

@@ -19,7 +19,18 @@ class IConfiguration
         IConfiguration(nlohmann::basic_json<> json) :
             values(json)
         {}
+
+        void MergeConfig(const IConfiguration conf) 
+        { 
+            values.merge_patch(conf.values); 
+        }
+
         auto operator[](const char* key) { return values[key]; }
+        friend std::ostream & operator<<( std::ostream &output, const IConfiguration &c ) 
+        { 
+            output << c.values;
+            return output;            
+        }
     private:
         nlohmann::basic_json<> values;
 };
