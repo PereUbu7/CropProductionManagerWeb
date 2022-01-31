@@ -4,6 +4,7 @@
 #include "CropProductionManager/Server/RequestHandler/crop.h"
 #include "CropProductionManager/Infrastructure/repositoryFake.h"
 #include "CropProductionManager/iConfiguration.hpp"
+#include "CropProductionManager/iLogger.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -29,8 +30,10 @@ namespace CropProductionManager::Server
                                 const function<void(const shared_ptr<Session>)> &callback);
             static void get_method_handler(const shared_ptr<Session> session);
         private:
+            shared_ptr<Resource> addCropResource(CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop> &repo);
+
+            Log::ILogger _logger;
             const string _ip;
             const uint16_t _port;
-            shared_ptr<Resource> addCropResource(CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop> &repo);
     };
 }

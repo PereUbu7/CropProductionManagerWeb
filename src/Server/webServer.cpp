@@ -4,7 +4,10 @@
 namespace CropProductionManager::Server
 {
     WebServer::WebServer(IConfiguration config) :
-        _ip{config["server"]}, _port{config["port"]} {}
+        _logger{},
+        _ip{config["server"]}, 
+        _port{config["port"]}
+         {}
 
     string WebServer::build_authenticate_header(void)
     {
@@ -45,9 +48,11 @@ namespace CropProductionManager::Server
 
     void WebServer::Setup(IConfiguration& config)
     {
+        _logger.LogDebug("Initializing database connection");
         CropProductionManager::Infrastructure::CropRepository repository{config["databaseConnection"]};
         const auto cropResource = addCropResource(repository);
 
+        _logger.LogDebug("Setting up service with address: " + _ip + ":" + std::to_string(_port));
         auto settings = make_shared<Settings>();
         settings->set_port(_port);
         settings->set_bind_address(_ip);
@@ -59,6 +64,7 @@ namespace CropProductionManager::Server
 
         Service service;
 
+        _logger.LogDebug("Setting dns to match: " + std::string(config["service"]["dnsMatcher"]));
         auto dnsHandler = make_shared<DnsHandler>(config["service"]["dnsMatcher"]);
         service.add_rule(dnsHandler);
         // service.set_authentication_handler(authentication_handler);
