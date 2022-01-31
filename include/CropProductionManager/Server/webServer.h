@@ -1,16 +1,19 @@
 #pragma once
 
 #include "CropProductionManager/Server/dnsHandler.h"
-
 #include "CropProductionManager/Server/RequestHandler/crop.h"
-
 #include "CropProductionManager/Infrastructure/repositoryFake.h"
+#include "CropProductionManager/iConfiguration.hpp"
 
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <cstdlib>
 #include <restbed>
 #include <regex>
+#include <libgen.h>
+#include <unistd.h>
+#include <linux/limits.h>
 
 namespace CropProductionManager::Server
 {
@@ -31,5 +34,6 @@ namespace CropProductionManager::Server
             const string _ip;
             const uint16_t _port;
             shared_ptr<Resource> addCropResource(CropProductionManager::Infrastructure::IRepository<Infrastructure::Crop> &repo);
+            std::string getCurrentPath();
     };
 }

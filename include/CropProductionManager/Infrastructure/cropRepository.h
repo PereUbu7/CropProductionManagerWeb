@@ -2,6 +2,7 @@
 
 #include "CropProductionManager/InternalModel/Infrastructure/crop.h"
 #include "CropProductionManager/Infrastructure/iRepository.h"
+#include "CropProductionManager/iConfiguration.hpp"
 #include <vector>
 #include <algorithm>
 #include <stdexcept>
@@ -20,7 +21,7 @@ namespace CropProductionManager::Infrastructure
     private:
         std::vector<Crop> crops;
     public:
-        CropRepository();
+        CropRepository(IConfiguration config);
         // GET
         std::vector<Crop> Get() const;
         Crop Get(const int id) const;

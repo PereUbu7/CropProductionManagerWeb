@@ -1,5 +1,6 @@
 #include "CropProductionManager/Server/webServer.h"
 
+
 namespace CropProductionManager::Server
 {
     WebServer::WebServer(const string ip, const uint16_t port) :
@@ -44,8 +45,13 @@ namespace CropProductionManager::Server
 
     void WebServer::Setup()
     {
+        auto completePath = std::string{getCurrentPath() + std::string("/appconfig.json")};
+        auto i = std::ifstream(completePath);
+        
+        auto config = IConfiguration(i);
+
         // CropProductionManager::Infrastructure::RepositoryFake<Infrastructure::Crop> repository{};
-        CropProductionManager::Infrastructure::CropRepository repository{};
+        CropProductionManager::Infrastructure::CropRepository repository{config["databaseConnection"]};
         const auto cropResource = addCropResource(repository);
 
         auto settings = make_shared<Settings>();
@@ -77,5 +83,16 @@ namespace CropProductionManager::Server
         RequestHandler::CropImpl cropImpl{repo};
         RequestHandler::CropMethod::implementationHolder = std::make_unique<RequestHandler::CropImpl>(cropImpl);
         return cropResource;
+    }
+
+    std::string WebServer::getCurrentPath()
+    {
+        char result[200];
+        ssize_t count = readlink("/proc/self/exe", result, 200);
+        if(count != -1)
+        {
+            return std::string{dirname(result)};
+        }
+        return std::string{};
     }
 }

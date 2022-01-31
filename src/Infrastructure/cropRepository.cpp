@@ -5,7 +5,7 @@ namespace CropProductionManager::Infrastructure
 {
     using Crop = CropProductionManager::InternalModel::Infrastructure::Crop;
 
-    CropRepository::CropRepository()
+    CropRepository::CropRepository(IConfiguration config)
     {
         try
         {
@@ -16,7 +16,10 @@ namespace CropProductionManager::Infrastructure
 
             /* Create a connection */
             driver = get_driver_instance();
-            con = driver->connect("tcp://127.0.0.1:3306", "root", "admin");
+            con = driver->connect(
+                config["server"], 
+                config["username"], 
+                config["password"]);
             /* Connect to the MySQL test database */
             con->setSchema("test");
         }
