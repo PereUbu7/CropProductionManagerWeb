@@ -14,14 +14,13 @@ namespace CropProductionManager::Infrastructure
             sql::Statement *stmt;
             // sql::ResultSet *res;
 
-            /* Create a connection */
             driver = get_driver_instance();
             con = driver->connect(
                 config["server"], 
                 config["username"], 
                 config["password"]);
-            /* Connect to the MySQL test database */
-            con->setSchema("test");
+            
+            con->setSchema(config["database"]);
         }
         catch (const std::exception &e)
         {
