@@ -13,6 +13,7 @@ namespace CropProductionManager
     class Program
     {
     public:
+    // TODO: Move ILogger instantiation here
         void Run(const std::string enviroment)
         {
             auto currentPath = getCurrentPath();

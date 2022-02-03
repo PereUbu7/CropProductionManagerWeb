@@ -4,7 +4,8 @@
 
 namespace CropProductionManager::Log
 {
-
+    // TODO: Att field to set at construction, whether to write to file on destruction (for fast threads)
+    // or on log call (for long running threads like Program and WebServer)
     class ILogger
     {
     public:
