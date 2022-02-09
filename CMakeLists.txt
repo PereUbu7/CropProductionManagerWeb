@@ -26,6 +26,9 @@ find_lto(CXX)
 
 set(SOURCES
     src/Infrastructure/cropRepository.cpp
+    src/Infrastructure/statementBuilder.cpp
+    src/Infrastructure/preparedStatementBuilder.cpp
+    src/Infrastructure/namedParametersAdapter.cpp
     src/Core/cropCore.cpp
     src/Api/cropApi.cpp
     src/InternalModel/Infrastructure/crop.cpp

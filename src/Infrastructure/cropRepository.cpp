@@ -1,30 +1,38 @@
 #include "CropProductionManager/Infrastructure/cropRepository.h"
 
-
 namespace CropProductionManager::Infrastructure
 {
     using Crop = CropProductionManager::InternalModel::Infrastructure::Crop;
 
-    CropRepository::CropRepository(IConfiguration config)
+    CropRepository::CropRepository(IConfiguration config) :
+    context{}
     {
         try
         {
-            sql::Driver *driver;
-            sql::Connection *con;
-            sql::Statement *stmt;
-            // sql::ResultSet *res;
+            auto res = context
+                .SetServer(config["server"])
+                ->SetUsername(config["username"])
+                ->SetPassword(config["password"])
+                ->SetDatabase(config["database"])
+                ->Connect() // TODO: Checkup named parameters
+                ->PrepareStatement("SELECT id, name, variety, batch FROM crop WHERE id = ?")
+                ->SetInt(1, 1)
+                ->ExecuteQuery()
+                ->GetResultSet();
 
-            driver = get_driver_instance();
-            con = driver->connect(
-                config["server"], 
-                config["username"], 
-                config["password"]);
-            
-            con->setSchema(config["database"]);
+            while (res->next())
+            {
+                std::cout << "id:" << res->getString("id") << '\t';
+                std::cout << "name:" << res->getString("name") << '\t';
+                std::cout << "variety:" << res->getString("variety") << '\t';
+                std::cout << "batch:" << res->getString("batch") << '\n';
+            }
         }
-        catch (const std::exception &e)
+        catch (const sql::SQLException &e)
         {
             std::cerr << e.what() << '\n';
+            std::cerr << " (MySQL error code: " << e.getErrorCode() << '\n';
+            std::cerr << ", SQLState: " << e.getSQLState() << " )" << '\n';
         }
     }
 

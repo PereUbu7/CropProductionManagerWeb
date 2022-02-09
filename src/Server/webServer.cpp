@@ -50,6 +50,7 @@ namespace CropProductionManager::Server
     {
         _logger.LogDebug("Initializing database connection");
         CropProductionManager::Infrastructure::CropRepository repository{config["databaseConnection"]};
+        return;
         const auto cropResource = addCropResource(repository);
 
         _logger.LogDebug("Setting up service with address: " + _ip + ":" + std::to_string(_port));
