@@ -25,6 +25,7 @@ namespace CropProductionManager::Infrastructure
         // PreparedStatementBuilder *BindInt(const std::string& name, int32_t value) { namedParametersAdapter.BindInt(name, value); return this; }
         PreparedStatementBuilder *SetInt(unsigned int index, int32_t value) { stmt->setInt(index, value); return this;};
         PreparedStatementBuilder *SetString(unsigned int index, const sql::SQLString& value) { stmt->setString(index, value); return this; };
+        
 
     private:
         std::unique_ptr<sql::PreparedStatement> stmt;

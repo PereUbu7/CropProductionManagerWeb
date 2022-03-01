@@ -59,6 +59,19 @@ namespace CropProductionManager::Infrastructure
             return &pstmtBuilder;
         }
 
+        DbContext* PrepareAndBind(const auto& indexedParameters)
+        {
+            auto b = PrepareStatement(indexedParameters.GetStatement());
+            for(auto intParam : indexedParameters.template GetBindings<int>())
+            {
+                if(intParam.set)
+                    b->SetInt(intParam.index+1, intParam.value);
+                else break;
+            }
+            b->ExecuteQuery();
+            return this;
+        }
+
     private:
         std::string _server;
         std::string _username;

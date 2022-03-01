@@ -28,7 +28,6 @@ set(SOURCES
     src/Infrastructure/cropRepository.cpp
     src/Infrastructure/statementBuilder.cpp
     src/Infrastructure/preparedStatementBuilder.cpp
-    src/Infrastructure/namedParametersAdapter.cpp
     src/Core/cropCore.cpp
     src/Api/cropApi.cpp
     src/InternalModel/Infrastructure/crop.cpp
@@ -69,5 +68,6 @@ set_target_properties(
             CXX_STANDARD_REQUIRED YES
             CXX_EXTENSIONS NO
 )
+set(CMAKE_CXX_FLAGS "-O0")
 
 add_subdirectory(tests)

@@ -16,7 +16,8 @@ namespace CropProductionManager::Infrastructure
     {
     private:
         std::vector<Crop> crops;
-        DbContext context;
+        // DbContext context;
+        IConfiguration _config;
 
     public:
         CropRepository(IConfiguration config);

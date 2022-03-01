@@ -1,27 +1,75 @@
 #include "CropProductionManager/Infrastructure/cropRepository.h"
+#include "CropProductionManager/Infrastructure/namedParametersAdapter.hpp"
 
 namespace CropProductionManager::Infrastructure
 {
     using Crop = CropProductionManager::InternalModel::Infrastructure::Crop;
 
-    CropRepository::CropRepository(IConfiguration config) :
-    context{}
+    CropRepository::CropRepository(IConfiguration config) : 
+        // context{},
+        _config{config}
     {
+        /* Compile time unit test of NamedParameterAdapeter */
+        static constexpr auto npa = NamedParameterAdapter(R"(
+            SELECT 
+                id, name, variety, batch 
+            FROM 
+                crop 
+            WHERE 
+                id = :id
+            AND batch = :batch
+)")
+        .BindInt("id", 3)
+        .BindInt("batch", 2);
+
+        constexpr compiletime::string<69> unitTestStatement(" SELECT id, name, variety, batch FROM crop WHERE id = ? AND batch = ?");
+        constexpr auto unitTestAcutal = npa.GetCompileTimeStatement();
+        static_assert(unitTestStatement.compare(unitTestAcutal, 69), "NamedParameterAdapter return wrong statement");
+
+        constexpr auto bindings = npa.GetBindings<int>();
+        static_assert(bindings[0].set, "Index 0 is not set");
+        static_assert(bindings[0].index == 0, "Index 0 is set to wrong index");
+        static_assert(bindings[0].value == 3, "Index 0 is set to wrong value");
+        static_assert(bindings[1].set, "Index 1 is not set");
+        static_assert(bindings[1].index == 1, "Index 1 is set to wrong index");
+        static_assert(bindings[1].value == 2, "Index 1 is set to wrong value");
+        static_assert(!bindings[2].set, "Index 2 is unproperly set");
+    }
+
+    // GET
+    std::vector<Crop> CropRepository::Get() const
+    {
+        auto retValue = std::vector<Crop>{};
         try
         {
+            static constexpr auto npa = NamedParameterAdapter(R"(
+            SELECT 
+                id, name, variety, batch 
+            FROM 
+                crop 
+            WHERE 1=:one
+)")
+            .BindInt("one", 1);
+
+            auto context = DbContext{};
+
             auto res = context
-                .SetServer(config["server"])
-                ->SetUsername(config["username"])
-                ->SetPassword(config["password"])
-                ->SetDatabase(config["database"])
-                ->Connect() // TODO: Checkup named parameters
-                ->PrepareStatement("SELECT id, name, variety, batch FROM crop WHERE id = ?")
-                ->SetInt(1, 1)
-                ->ExecuteQuery()
-                ->GetResultSet();
+                           .SetServer(_config["server"])
+                           ->SetUsername(_config["username"])
+                           ->SetPassword(_config["password"])
+                           ->SetDatabase(_config["database"])
+                           ->Connect()
+                           ->PrepareAndBind(npa)
+                           ->GetResultSet();
 
             while (res->next())
             {
+                auto j = res->getString("");
+                retValue.push_back(Crop{
+                    res->getInt("id"),
+                    res->getString("name"),
+                    res->getString("variety"),
+                    res->getInt("batch")});
                 std::cout << "id:" << res->getString("id") << '\t';
                 std::cout << "name:" << res->getString("name") << '\t';
                 std::cout << "variety:" << res->getString("variety") << '\t';
@@ -34,12 +82,8 @@ namespace CropProductionManager::Infrastructure
             std::cerr << " (MySQL error code: " << e.getErrorCode() << '\n';
             std::cerr << ", SQLState: " << e.getSQLState() << " )" << '\n';
         }
-    }
 
-    // GET
-    std::vector<Crop> CropRepository::Get() const
-    {
-        return crops;
+            return retValue;
     }
     Crop CropRepository::Get(const int id) const
     {

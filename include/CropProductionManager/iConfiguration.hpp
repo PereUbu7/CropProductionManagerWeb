@@ -25,7 +25,7 @@ class IConfiguration
             values.merge_patch(conf.values); 
         }
 
-        auto operator[](const char* key) { return values[key]; }
+        auto operator[](const char* key) const { return values[key]; }
         friend std::ostream & operator<<( std::ostream &output, const IConfiguration &c ) 
         { 
             output << c.values;
