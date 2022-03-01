@@ -36,7 +36,11 @@ public:
     {
         if(m_size != size)
             return false;
-        for(int index{0}; index<m_size; ++index)
+        return compare(other);
+    }
+    constexpr const bool compare(const char *other) const
+    {
+        for(int index{0}; other[index] != '\0' && index < m_size; ++index)
         {
             if(m_data[index] != other[index])
                 return false;

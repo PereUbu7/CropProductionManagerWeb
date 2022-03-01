@@ -5,9 +5,8 @@ namespace CropProductionManager::Infrastructure
 {
     using Crop = CropProductionManager::InternalModel::Infrastructure::Crop;
 
-    CropRepository::CropRepository(IConfiguration config) : 
-        // context{},
-        _config{config}
+    CropRepository::CropRepository(IConfiguration config) : // context{},
+                                                            _config{config}
     {
         /* Compile time unit test of NamedParameterAdapeter */
         static constexpr auto npa = NamedParameterAdapter(R"(
@@ -15,25 +14,32 @@ namespace CropProductionManager::Infrastructure
                 id, name, variety, batch 
             FROM 
                 crop 
+            LEFT JOIN
+                event
+            ON event.crop = crop.id 
+                AND event.timestamp < :startDate
+                AND event.timestamp > :endDate
             WHERE 
                 id = :id
             AND batch = :batch
-)")
-        .BindInt("id", 3)
-        .BindInt("batch", 2);
+            AND family = :family
+)");
 
-        constexpr compiletime::string<69> unitTestStatement(" SELECT id, name, variety, batch FROM crop WHERE id = ? AND batch = ?");
+        constexpr compiletime::string<172> unitTestStatement(" SELECT id, name, variety, batch FROM crop LEFT JOIN event ON event.crop = crop.id AND event.timestamp < ? AND event.timestamp > ? WHERE id = ? AND batch = ? AND family = ?");
         constexpr auto unitTestAcutal = npa.GetCompileTimeStatement();
-        static_assert(unitTestStatement.compare(unitTestAcutal, 69), "NamedParameterAdapter return wrong statement");
+        static_assert(unitTestStatement.compare(unitTestAcutal, 172), "NamedParameterAdapter return wrong statement");
 
-        constexpr auto bindings = npa.GetBindings<int>();
-        static_assert(bindings[0].set, "Index 0 is not set");
-        static_assert(bindings[0].index == 0, "Index 0 is set to wrong index");
-        static_assert(bindings[0].value == 3, "Index 0 is set to wrong value");
-        static_assert(bindings[1].set, "Index 1 is not set");
-        static_assert(bindings[1].index == 1, "Index 1 is set to wrong index");
-        static_assert(bindings[1].value == 2, "Index 1 is set to wrong value");
-        static_assert(!bindings[2].set, "Index 2 is unproperly set");
+        constexpr auto startDateIndex = npa["startDate"];
+        constexpr auto endDateIndex = npa["endDate"];
+        constexpr auto idIndex = npa["id"];
+        constexpr auto batchIndex = npa["batch"];
+        constexpr auto familyIndex = npa["family"];
+
+        static_assert(startDateIndex == 1, "StartDate has wrong index");
+        static_assert(endDateIndex == 2, "EndDate has wrong index");
+        static_assert(idIndex == 3, "Id has wrong index");
+        static_assert(batchIndex == 4, "Batch has wrong index");
+        static_assert(familyIndex == 5, "Family has wrong index");
     }
 
     // GET
@@ -48,8 +54,7 @@ namespace CropProductionManager::Infrastructure
             FROM 
                 crop 
             WHERE 1=:one
-)")
-            .BindInt("one", 1);
+)");
 
             auto context = DbContext{};
 
@@ -59,12 +64,13 @@ namespace CropProductionManager::Infrastructure
                            ->SetPassword(_config["password"])
                            ->SetDatabase(_config["database"])
                            ->Connect()
-                           ->PrepareAndBind(npa)
+                           ->PrepareStatement(npa.GetStatement())
+                           ->SetInt(npa["one"], 1)
+                           ->ExecuteQuery()
                            ->GetResultSet();
 
             while (res->next())
             {
-                auto j = res->getString("");
                 retValue.push_back(Crop{
                     res->getInt("id"),
                     res->getString("name"),
@@ -78,12 +84,13 @@ namespace CropProductionManager::Infrastructure
         }
         catch (const sql::SQLException &e)
         {
+            std::cerr << "In cropRepository::Get<Crop>()\n";
             std::cerr << e.what() << '\n';
             std::cerr << " (MySQL error code: " << e.getErrorCode() << '\n';
             std::cerr << ", SQLState: " << e.getSQLState() << " )" << '\n';
         }
 
-            return retValue;
+        return retValue;
     }
     Crop CropRepository::Get(const int id) const
     {
