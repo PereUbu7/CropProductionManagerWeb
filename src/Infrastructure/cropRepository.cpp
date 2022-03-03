@@ -5,42 +5,9 @@ namespace CropProductionManager::Infrastructure
 {
     using Crop = CropProductionManager::InternalModel::Infrastructure::Crop;
 
-    CropRepository::CropRepository(IConfiguration config) : // context{},
-                                                            _config{config}
-    {
-        /* Compile time unit test of NamedParameterAdapeter */
-        static constexpr auto npa = NamedParameterAdapter(R"(
-            SELECT 
-                id, name, variety, batch 
-            FROM 
-                crop 
-            LEFT JOIN
-                event
-            ON event.crop = crop.id 
-                AND event.timestamp < :startDate
-                AND event.timestamp > :endDate
-            WHERE 
-                id = :id
-            AND batch = :batch
-            AND family = :family
-)");
-
-        constexpr compiletime::string<172> unitTestStatement(" SELECT id, name, variety, batch FROM crop LEFT JOIN event ON event.crop = crop.id AND event.timestamp < ? AND event.timestamp > ? WHERE id = ? AND batch = ? AND family = ?");
-        constexpr auto unitTestAcutal = npa.GetCompileTimeStatement();
-        static_assert(unitTestStatement.compare(unitTestAcutal, 172), "NamedParameterAdapter return wrong statement");
-
-        constexpr auto startDateIndex = npa["startDate"];
-        constexpr auto endDateIndex = npa["endDate"];
-        constexpr auto idIndex = npa["id"];
-        constexpr auto batchIndex = npa["batch"];
-        constexpr auto familyIndex = npa["family"];
-
-        static_assert(startDateIndex == 1, "StartDate has wrong index");
-        static_assert(endDateIndex == 2, "EndDate has wrong index");
-        static_assert(idIndex == 3, "Id has wrong index");
-        static_assert(batchIndex == 4, "Batch has wrong index");
-        static_assert(familyIndex == 5, "Family has wrong index");
-    }
+    CropRepository::CropRepository(IConfiguration config) : 
+        _config{config}
+    {}
 
     // GET
     std::vector<Crop> CropRepository::Get() const
@@ -59,27 +26,19 @@ namespace CropProductionManager::Infrastructure
             auto context = DbContext{};
 
             auto res = context
-                           .SetServer(_config["server"])
-                           ->SetUsername(_config["username"])
-                           ->SetPassword(_config["password"])
-                           ->SetDatabase(_config["database"])
-                           ->Connect()
-                           ->PrepareStatement(npa.GetStatement())
-                           ->SetInt(npa["one"], 1)
-                           ->ExecuteQuery()
-                           ->GetResultSet();
+                .SetServer(_config["server"])
+                ->SetUsername(_config["username"])
+                ->SetPassword(_config["password"])
+                ->SetDatabase(_config["database"])
+                ->Connect()
+                ->PrepareStatement(npa.GetStatement())
+                ->SetInt(npa["one"], 1)
+                ->ExecuteQuery()
+                ->GetResultSet();
 
             while (res->next())
             {
-                retValue.push_back(Crop{
-                    res->getInt("id"),
-                    res->getString("name"),
-                    res->getString("variety"),
-                    res->getInt("batch")});
-                std::cout << "id:" << res->getString("id") << '\t';
-                std::cout << "name:" << res->getString("name") << '\t';
-                std::cout << "variety:" << res->getString("variety") << '\t';
-                std::cout << "batch:" << res->getString("batch") << '\n';
+                retValue.push_back(Crop::FromSqlResultSet(*res));
             }
         }
         catch (const sql::SQLException &e)
@@ -94,40 +53,151 @@ namespace CropProductionManager::Infrastructure
     }
     Crop CropRepository::Get(const int id) const
     {
-        auto foundCrops{std::find_if(begin(crops), end(crops), [id](Crop c)
-                                     { return c.id == id; })};
-        if (foundCrops != end(crops))
+        try
         {
-            return foundCrops[0];
+            static constexpr auto npa = NamedParameterAdapter(R"(
+            SELECT 
+                id, name, variety, batch 
+            FROM 
+                crop 
+            WHERE id=:id
+)");
+
+            auto context = DbContext{};
+
+            auto res = context
+                           .SetServer(_config["server"])
+                           ->SetUsername(_config["username"])
+                           ->SetPassword(_config["password"])
+                           ->SetDatabase(_config["database"])
+                           ->Connect()
+                           ->PrepareStatement(npa.GetStatement())
+                           ->SetInt(npa["id"], id)
+                           ->ExecuteQuery()
+                           ->GetResultSet();
+
+            while (res->next())
+            {
+                return Crop::FromSqlResultSet(*res);
+            }
+        }
+        catch (const sql::SQLException &e)
+        {
+            std::cerr << "In cropRepository::Get<Crop>(" << id << ")\n";
+            std::cerr << e.what() << '\n';
+            std::cerr << " (MySQL error code: " << e.getErrorCode() << '\n';
+            std::cerr << ", SQLState: " << e.getSQLState() << " )" << '\n';
         }
         throw std::invalid_argument("not found");
     }
     // POST
-    void CropRepository::Post(Crop crop)
+    void CropRepository::Post(Crop crop) const
     {
-        crops.push_back(crop);
+        try
+        {
+            static constexpr auto npa = NamedParameterAdapter(R"(
+            INSERT INTO crop (id, name, variety, batch)
+            VALUES (:id, :name, :variety, :batch)
+)");
+
+            auto context = DbContext{};
+
+            auto res = context
+                           .SetServer(_config["server"])
+                           ->SetUsername(_config["username"])
+                           ->SetPassword(_config["password"])
+                           ->SetDatabase(_config["database"])
+                           ->Connect()
+                           ->PrepareStatement(npa.GetStatement())
+                           ->SetInt(npa["id"], crop.id)
+                           ->SetString(npa["name"], crop.name)
+                           ->SetString(npa["variety"], crop.variety)
+                           ->SetInt(npa["batch"], crop.batch)
+                           ->ExecuteQuery();
+        }
+        catch (const sql::SQLException &e)
+        {
+            std::cerr << "In cropRepository::Post<Crop>(" << 
+                crop.id << ", " <<
+                crop.name << ", " <<
+                crop.variety << ", " <<
+                crop.batch << ")\n";
+            std::cerr << e.what() << '\n';
+            std::cerr << " (MySQL error code: " << e.getErrorCode() << '\n';
+            std::cerr << ", SQLState: " << e.getSQLState() << " )" << '\n';
+        }
     }
     // PUT
-    void CropRepository::Put(Crop crop)
+    void CropRepository::Put(Crop crop) const
     {
-        auto cropToModify{
-            std::find_if(begin(crops), end(crops), [crop](Crop c)
-                         { return c.id == crop.id; })};
-
-        if (cropToModify != end(crops))
+        try
         {
-            (*cropToModify).Update(crop);
+            static constexpr auto npa = NamedParameterAdapter(R"(
+            UPDATE crop SET
+                name = :name, 
+                variety = :variety, 
+                batch = :batch
+            WHERE
+                id = :id
+)");
+
+            auto context = DbContext{};
+
+            auto res = context
+                           .SetServer(_config["server"])
+                           ->SetUsername(_config["username"])
+                           ->SetPassword(_config["password"])
+                           ->SetDatabase(_config["database"])
+                           ->Connect()
+                           ->PrepareStatement(npa.GetStatement())
+                           ->SetInt(npa["id"], crop.id)
+                           ->SetString(npa["name"], crop.name)
+                           ->SetString(npa["variety"], crop.variety)
+                           ->SetInt(npa["batch"], crop.batch)
+                           ->ExecuteQuery();
+        }
+        catch (const sql::SQLException &e)
+        {
+            std::cerr << "In cropRepository::Put<Crop>(" << 
+                crop.id << ", " <<
+                crop.name << ", " <<
+                crop.variety << ", " <<
+                crop.batch << ")\n";
+            std::cerr << e.what() << '\n';
+            std::cerr << " (MySQL error code: " << e.getErrorCode() << '\n';
+            std::cerr << ", SQLState: " << e.getSQLState() << " )" << '\n';
         }
     }
     // DELETE
-    void CropRepository::Remove(int id)
+    void CropRepository::Remove(int id) const
     {
-        auto it = std::find_if(begin(crops), end(crops), [id](Crop crop)
-                               { return crop.id == id; });
-
-        if (it != end(crops))
+        try
         {
-            crops.erase(it);
+            static constexpr auto npa = NamedParameterAdapter(R"(
+            DELETE FROM crop 
+            WHERE
+                id = :id
+)");
+
+            auto context = DbContext{};
+
+            auto res = context
+                           .SetServer(_config["server"])
+                           ->SetUsername(_config["username"])
+                           ->SetPassword(_config["password"])
+                           ->SetDatabase(_config["database"])
+                           ->Connect()
+                           ->PrepareStatement(npa.GetStatement())
+                           ->SetInt(npa["id"], id)
+                           ->ExecuteQuery();
+        }
+        catch (const sql::SQLException &e)
+        {
+            std::cerr << "In cropRepository::Remove<Crop>(" << 
+                id << ")\n";
+            std::cerr << e.what() << '\n';
+            std::cerr << " (MySQL error code: " << e.getErrorCode() << '\n';
+            std::cerr << ", SQLState: " << e.getSQLState() << " )" << '\n';
         }
     }
 }

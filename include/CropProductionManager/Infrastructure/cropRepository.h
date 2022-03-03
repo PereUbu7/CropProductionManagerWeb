@@ -16,7 +16,6 @@ namespace CropProductionManager::Infrastructure
     {
     private:
         std::vector<Crop> crops;
-        // DbContext context;
         IConfiguration _config;
 
     public:
@@ -25,10 +24,10 @@ namespace CropProductionManager::Infrastructure
         std::vector<Crop> Get() const;
         Crop Get(const int id) const;
         // POST
-        void Post(Crop crop);
+        void Post(Crop crop) const;
         // PUT
-        void Put(Crop crop);
+        void Put(Crop crop) const;
         // DELETE
-        void Remove(int id);
+        void Remove(int id) const;
     };
 }

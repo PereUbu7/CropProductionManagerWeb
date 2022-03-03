@@ -9,4 +9,14 @@ namespace CropProductionManager::InternalModel::Infrastructure
         variety = crop.variety;
         batch = crop.batch;
     }
+
+    Crop Crop::FromSqlResultSet(const sql::ResultSet& res)
+    {
+        return Crop{
+            res.getInt("id"),
+            res.getString("name"),
+            res.getString("variety"),
+            res.getInt("batch")
+        };
+    }
 }

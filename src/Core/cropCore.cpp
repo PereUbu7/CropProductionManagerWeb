@@ -27,8 +27,6 @@ namespace CropProductionManager::Core
     }
     Crop CropCore::Post(Crop& crop)
     {
-        crop.id = CropCore::createId();
-
         _repository.Post(crop.ToInfrastructure());
 
         return crop;
@@ -55,7 +53,7 @@ namespace CropProductionManager::Core
         {
             auto idArg = std::stoi(id);
             std::cout << "In Core Remove, id is: " << id << '\n';
-            _repository.Remove(0);
+            _repository.Remove(idArg);
         }
         // TODO: Return something useful to web server if this happens
         catch(const std::invalid_argument& e)
