@@ -5,6 +5,9 @@
 #include "CropProductionManager/Infrastructure/repositoryFake.h"
 #include "CropProductionManager/iConfiguration.hpp"
 #include "CropProductionManager/iLogger.hpp"
+#include "CropProductionManager/Server/Authentication/HashDigestListener.hpp"
+
+#include "digest-auth-session-lib/DigestManager.h"
 
 #include <fstream>
 #include <iostream>
@@ -17,8 +20,12 @@
 namespace CropProductionManager::Server
 {
     using namespace restbed;
-    using namespace std;
     using namespace RequestHandler;
+    using string = std::string;
+    template<typename T>
+    using shared_ptr = std::shared_ptr<T>;
+    template<typename T>
+    using function = std::function<T>;
 
     class WebServer final
     {

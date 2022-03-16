@@ -37,6 +37,12 @@ set(SOURCES
     src/Server/dnsHandler.cpp
     src/Server/url.cpp
     src/Server/RequestHandler/crop.cpp
+    src/Server/Authentication/HashDigestListener.cpp
+
+    extern/digest-auth-session-lib/DigestManager.cpp
+    extern/digest-auth-session-lib/Digestinfo.cpp
+    extern/digest-auth-session-lib/utils/string.cpp
+    extern/digest-auth-session-lib/utils/stringutil.cpp
 )
 
 set(TESTFILES
@@ -52,7 +58,7 @@ add_library(${LIBRARY_NAME} OBJECT ${SOURCES})
 target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(${LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/extern/)
 
-target_link_libraries(${LIBRARY_NAME} PUBLIC doctest restbed mysqlcppconn)
+target_link_libraries(${LIBRARY_NAME} PUBLIC doctest restbed mysqlcppconn ssl crypto)
 
 # target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
 
