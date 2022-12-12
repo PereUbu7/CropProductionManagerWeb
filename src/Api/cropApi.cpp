@@ -19,7 +19,7 @@ namespace CropProductionManager::Api
     } 
     Crop CropApi::Get(const int id) const
     {
-        auto coreCrop = Core::Crop{_core.Get(id)};
+        auto coreCrop = _core.Get(id);
         return coreCrop.ToApi();
     }
     Crop CropApi::Post(const Crop& crop)
