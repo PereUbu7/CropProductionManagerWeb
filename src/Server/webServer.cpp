@@ -104,7 +104,7 @@ namespace CropProductionManager::Server
         _logger.LogDebug("Setting dns to match: " + std::string(config["service"]["dnsMatcher"]));
         auto dnsHandler = std::make_shared<DnsHandler>(config["service"]["dnsMatcher"]);
         service.add_rule(dnsHandler);
-        service.set_authentication_handler(authentication_handler);
+        // service.set_authentication_handler(authentication_handler);
         service.publish(cropResource);
         service.start(settings);
     }
